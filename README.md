@@ -3,8 +3,8 @@ Ever wondered what that item you just got does? Whether deaths in this game are 
 To run locally:  
   
 Backend:  
-- Create an OpenAI API key (costs $5 minimum)  
-- Add this API key to game-assist/game-assist-backend/.env (OPENAI_API_KEY=...)  
+Create an OpenAI API key (costs $5 minimum)  
+Add this API key to game-assist/game-assist-backend/.env (OPENAI_API_KEY=...)  
 `cd game-assist-backend`  
 `venv/Scripts/activate`  
 `pip install -r requirements.txt`  
