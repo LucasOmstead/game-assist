@@ -11,14 +11,14 @@ Add this API key to game-assist/game-assist-backend/.env (OPENAI_API_KEY=...)
 `flask run --reload`  
 To avoid overloading Fandom's servers or getting your IP blocked, keep the DOCS_PER_SECOND env variable to 1 (this will mean that large wikis take more time to load). To make the loading process faster but less comprehensive, change MAX_DOCS (limits the max number of Fandom pages retrieved for a given wiki).
 
-
+  
 Frontend:  
 `cd game-assist-frontend`  
 `npm i`  
 `npm start`  
 
-
-Tech stack:
-ChromaDB for local vector DB
-Flask + Angular
-BeautifulSoup for web scraping
+  
+Tech stack:  
+ChromaDB for local vector DB  
+Flask + Angular  
+BeautifulSoup for web scraping  
