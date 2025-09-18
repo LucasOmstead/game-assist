@@ -20,12 +20,12 @@ export class App {
   selectedFandom: string | null = null;
   isLoading = false;
   messages: Message[] = [];
-  currentMessage = 'minecraft';
+  currentMessage = 'https://minecraft.fandom.com';
   isTyping = false;
   private apiBaseUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient) {
-    this.addMessage('Type a fandom\'s name to generate a RAG context for it', false);
+    this.addMessage('Enter the wiki\'s homepage to create a RAG index of its documents:', false);
   }
 
   sendMessage() {
@@ -35,7 +35,7 @@ export class App {
     this.addMessage(userMessage, true);
     
     if (!this.selectedFandom) {
-      this.setupFandom(userMessage);
+      this.setupFandomFromUrl(userMessage);
     } else {
       this.askQuestion(userMessage);
     }
@@ -43,22 +43,51 @@ export class App {
     this.currentMessage = '';
   }
 
-  private setupFandom(fandomName: string) {
+  private setupFandomFromUrl(url: string) {
+    const fandomName = this.extractFandomName(url);
+    if (!fandomName) {
+      this.addMessage('Please enter a valid Fandom wiki URL (e.g., https://minecraft.fandom.com)', false);
+      return;
+    }
+    
     this.selectedFandom = fandomName;
     this.isLoading = true;
-    this.addMessage(`Setting up ${fandomName} wiki database...`, false);
+    this.addMessage(`Currently building/accessing RAG index`, false);
     
     this.http.get(`${this.apiBaseUrl}/gen-rag-database?wiki_name=${encodeURIComponent(fandomName)}`).subscribe({
-      next: () => {
+      next: (response: any) => {
         this.isLoading = false;
-        this.addMessage(`${fandomName} wiki is ready! Ask me anything about ${fandomName}.`, false);
+        this.addMessage(`RAG index created! What can I help you with?`, false);
       },
       error: () => {
         this.isLoading = false;
-        this.addMessage(`Failed to load ${fandomName} wiki data. Please try a different fandom name.`, false);
+        this.addMessage(`Failed to load ${fandomName} wiki data. Please try a different fandom URL.`, false);
         this.selectedFandom = null;
       }
     });
+  }
+
+  private extractFandomName(url: string): string | null {
+    try {
+      // Handle URLs with or without protocol
+      let processedUrl = url;
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        processedUrl = 'https://' + url;
+      }
+      
+      const urlObj = new URL(processedUrl);
+      const hostname = urlObj.hostname;
+      
+      // Extract fandom name from URL like "minecraft.fandom.com"
+      const match = hostname.match(/^(.+)\.fandom\.com$/);
+      if (match) {
+        return match[1];
+      }
+      
+      return null;
+    } catch {
+      return null;
+    }
   }
 
   private askQuestion(question: string) {
@@ -91,11 +120,11 @@ export class App {
     this.currentMessage = '';
     this.isTyping = false;
     this.isLoading = false;
-    this.addMessage('Type a fandom\'s name to generate a RAG context for it', false);
+    this.addMessage('Enter the wiki\'s homepage to create a RAG index of its documents:', false);
   }
 
   getPlaceholderText(): string {
-    return !this.selectedFandom ? 'Enter a fandom name (e.g., Minecraft, Pokemon, etc.)' : `Ask about ${this.selectedFandom}...`;
+    return !this.selectedFandom ? 'Enter a fandom wiki URL (e.g., https://minecraft.fandom.com)' : `Ask about ${this.selectedFandom}...`;
   }
 
   formatTime(date: Date): string {

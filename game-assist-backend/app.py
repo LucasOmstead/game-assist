@@ -63,7 +63,9 @@ Question: {query}"""
 def get_new_database():
     wiki_name = request.args.get('wiki_name')
     db.add_wiki(wiki_name=wiki_name)
-    return jsonify({"message": f"RAG database for {wiki_name} created/loaded."})
+    return jsonify({
+        "message": f"RAG database for {wiki_name} created/loaded."
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

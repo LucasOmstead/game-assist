@@ -1,7 +1,7 @@
 <div class="chatbot-container">
   <div class="header">
     <h1>Fandom Assistant</h1>
-    <p *ngIf="!selectedFandom">Enter a fandom name to get started</p>
+    <p *ngIf="!selectedFandom">Enter a fandom wiki URL to get started</p>
     <p *ngIf="selectedFandom && isLoading">Loading {{ selectedFandom }} wiki...</p>
     <p *ngIf="selectedFandom && !isLoading">Ask me anything about {{ selectedFandom }}!</p>
   </div>
