@@ -22,3 +22,7 @@ Tech stack:
 ChromaDB for local vector DB  
 Flask + Angular  
 BeautifulSoup for web scraping  
+
+Screenshots:
+![Loading Screen](./Loading_Screenshot.png)
+![Chat Example](./Chat_Screenshot.png)
